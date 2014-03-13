@@ -1,0 +1,308 @@
+<apex:page standardController="Sale__c" extensions="BookDealWizard" tabStyle="Sale__c">
+    <apex:includeScript value="{!$Resource.jquery}"/>
+    
+    <apex:sectionHeader title="{!pageTitle}" subtitle="Step {!stepNumber} of {!totalSteps}"/>
+    <apex:form >
+        <apex:pagemessages />
+        <apex:pageMessage summary="This deal has already been booked." severity="warning" strength="1" rendered="{!Sale__c.Booked__c}" />
+        <apex:pageBlock title="" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Previous" action="{!previous}" rendered="{!stepNumber>1}"/>
+                <apex:commandButton value="Next Step" action="{!next}" rendered="{!stepNumber<totalSteps}"/>
+                <apex:commandButton value="Book Deal" action="{!bookDeal}" rendered="{!stepNumber=totalSteps}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" immediate="true" />
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection rendered="{!AND(stepNumber=1, comp.RecordTypeId == RT_LEASE_COMPS_ID)}" title="Confirm Lease Details">
+                  <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Lease_Deal_Details}" var="f"> 
+                      <apex:inputField value="{!Sale__c[f]}" /> 
+                  </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!AND(stepNumber=1, comp.RecordTypeId == RT_SALE_COMPS_ID)}" title="Confirm Sale Details">
+                  <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Sale_Deal_Details}" var="f"> 
+                      <apex:inputField value="{!Sale__c[f]}" />
+                  </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!AND(stepNumber=2, comp.RecordTypeId == RT_LEASE_COMPS_ID)}" title="Confirm Lease Summary">
+                  <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Lease_Summary}" var="f"> 
+                      <apex:inputField value="{!Sale__c[f]}" />
+                  </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!AND(stepNumber=2, comp.RecordTypeId == RT_SALE_COMPS_ID)}" title="Confirm Sale Summary">
+                  <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Sale_Summary}" var="f"> 
+                      <apex:inputField value="{!Sale__c[f]}" />
+                  </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:outputPanel rendered="{!stepNumber=3}">
+            
+                <apex:pageblocksection >
+	            <apex:pageblocksectionitem >
+	                <apex:outputLabel for="GrossCommissions">Commissions</apex:outputLabel>
+	                <apex:outputText id="GrossCommissions" styleclass="CommissionsValueStyleClass"  value="{0, number, currency}">
+	                      <apex:param value="{!comp.Commission__c}" />
+	                </apex:outputText>
+	            </apex:pageblocksectionitem>
+	        </apex:pageblocksection> 
+            
+            
+	            <apex:pageBlockSection title="External Agent Commissions" columns="1">
+	                  <apex:pageblocktable value="{!ListMap['ExternalCommissions']}" var="item" id="list" title="External Agents">
+	                        <apex:facet name="footer">
+	                            <apex:commandlink value="Add External Agent" action="{!addItem}" rerender="list">
+	                                <apex:param name="currentList" value="ExternalCommissions" assignTo="{!currentListType}"/>
+	                            </apex:commandlink>
+	                        </apex:facet>
+	                        <apex:column >
+	                            <apex:commandlink value="Del" action="{!deleteItem}" rerender="list">
+	                                <apex:param name="toDelNum" value="{!item.RowNum}" assignTo="{!rowNumberForUpdate}"/>
+	                                <apex:param name="currentList" value="ExternalCommissions" assignTo="{!currentListType}"/>
+	                            </apex:commandlink>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Broker_Contact__c.Label}">
+	                            <apex:inputfield value="{!item.commission.Broker_contact__c}"/>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Agent_Percentage__c.Label}">
+	                            <apex:inputfield value="{!item.commission.Agent_Percentage__c}" styleClass="externalAgentPercentClass{!item.commission.Id}" onkeyUp="calculateGrossCommission('{!item.commission.Id}', 'CommissionsValueStyleClass', 'externalAgentPercentClass' , 'externalAgentGrossCommisionCol'); "/>
+	                        </apex:column>
+	                        
+	                        <apex:column headerValue="Agent Gross Commission" styleClass="externalAgentGrossCommisionCol{!item.commission.Id}" >
+			                    <apex:outputfield value="{!item.commission.Agent_Gross_Commission__c}" style="display: block !important;" />
+			                </apex:column>
+	                        
+	                    </apex:pageblocktable>
+	             </apex:pageBlockSection>
+	             <apex:pageBlockSection title="Internal Agent Commissions" columns="1">
+	                    <apex:pageblocktable value="{!ListMap['InternalCommissions']}" var="item" id="list2">
+	                        <apex:facet name="footer">
+	                            <apex:commandlink value="Add Internal Agent" action="{!addItem}" rerender="list2">
+	                                <apex:param name="currentList" value="InternalCommissions" assignTo="{!currentListType}"/>
+	                            </apex:commandlink>
+	                        </apex:facet>
+	                        <apex:column >
+	                            <apex:commandlink value="Del" action="{!deleteItem}" rerender="list2" immediate="true">
+	                                <apex:param name="toDelNum" value="{!item.RowNum}" assignTo="{!rowNumberForUpdate}"/>
+	                                <apex:param name="currentList" value="InternalCommissions" assignTo="{!currentListType}"/>
+	                            </apex:commandlink>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Broker__c.Label}">
+	                            <apex:inputfield value="{!item.commission.Broker__c}"/>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Agent_Percentage__c.Label}">
+	                            <apex:inputfield value="{!item.commission.Agent_Percentage__c}" styleClass="internalAgentPercentClass{!item.commission.Id}"  onkeyUp="calculateGrossCommission('{!item.commission.Id}', 'CommissionsValueStyleClass', 'internalAgentPercentClass', 'internalAgentGrossCommisionCol'); "/>
+	                        </apex:column>
+	                        <apex:column headerValue="Agent Gross Commission" styleClass="internalAgentGrossCommisionCol{!item.commission.Id}" >
+			                    <apex:outputfield value="{!item.commission.Agent_Gross_Commission__c}" style="display: block !important;" />
+			                </apex:column>
+	                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+	            
+		        <div align="center" > 
+		            <apex:outputLabel for="TotalPercent" value="Total %" style="font-weight: bold;" />&nbsp;&nbsp;&nbsp;
+		            <apex:outputText style="color: {!IF((totalPercent) != 100 , 'red', 'green')}" styleClass="totalPercentClass" id="TotalPercent" value="{0, number, percent}">
+		                <apex:param value="{!(totalPercent/100)}" />
+		            </apex:outputText>
+		        </div>
+            </apex:outputPanel>
+            <apex:pageBlockSection rendered="{!stepNumber=4}" title="Commission Items" columns="1">
+                  <apex:pageblocktable value="{!ListMap['CommissionItems']}" var="item" id="list">
+                        <apex:facet name="footer">
+                            <apex:commandlink value="Add Commission Item" action="{!addItem}" rerender="list" >
+                                <apex:param name="currentList" value="CommissionItems" assignTo="{!currentListType}"/>
+                            </apex:commandlink>
+                        </apex:facet>
+                        <apex:column >
+                            <apex:commandlink value="Del" action="{!deleteItem}" rerender="list" immediate="true">
+                                <apex:param name="toDelNum" value="{!item.RowNum}" assignTo="{!rowNumberForUpdate}"/>
+                                <apex:param name="currentList" value="CommissionItems" assignTo="{!currentListType}"/>
+                            </apex:commandlink>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Type__c.Label}">
+                            <apex:inputfield value="{!item.CommissionItem.Type__c}" required="true"/>
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Rent_Sq_Ft__c.Label}" rendered="{!(comp.RecordTypeId == RT_LEASE_COMPS_ID)}"> <!-- rendered="{!Contains(Sale__c.Rental_Rate_Type__c,'/SF/')}" -->
+                            <apex:inputfield value="{!item.CommissionItem.Rent_Sq_Ft__c}" required="true" />
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Area_Sq_Ft__c.Label}" rendered="{!(comp.RecordTypeId == RT_LEASE_COMPS_ID)}"> <!-- rendered="{!Contains(Sale__c.Rental_Rate_Type__c,'/SF/')}" -->
+                            <apex:inputfield value="{!item.CommissionItem.Area_Sq_Ft__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!IF(comp.RecordTypeId == RT_SALE_COMPS_ID, 'Amount', 'Rent/Period')}" rendered="{!NOT(Contains(Sale__c.Rental_Rate_Type__c,'/SF/'))}"> <!-- headerValue="Rent/Period" -->
+                            <apex:inputfield value="{!item.CommissionItem.Amount__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!IF(comp.RecordTypeId == RT_SALE_COMPS_ID, 'Quantity', '# Periods')}"> <!-- headerValue="# Periods"  -->
+                            <apex:inputfield value="{!item.CommissionItem.Quantity__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Commission_Percent__c.Label}">
+                            <apex:inputfield value="{!item.CommissionItem.Commission_Percent__c}" required="true"/>
+                        </apex:column>                        
+                    </apex:pageblocktable> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection rendered="{!stepNumber=5}" title="Holdbacks" columns="1">
+                  <apex:pageblocktable value="{!ListMap['Holdbacks']}" var="item" id="list">
+                        <apex:facet name="footer">
+                            <apex:commandlink value="Add Holdback" action="{!addItem}" rerender="list" >
+                                <apex:param name="currentList" value="Holdbacks" assignTo="{!currentListType}"/>
+                            </apex:commandlink>
+                        </apex:facet>
+                        <apex:column >
+                            <apex:commandlink value="Del" action="{!deleteItem}" rerender="list" immediate="true">
+                                <apex:param name="toDelNum" value="{!item.RowNum}" assignTo="{!rowNumberForUpdate}"/>
+                            </apex:commandlink>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Holdback__c.fields.Type__c.Label}">
+                            <apex:inputfield value="{!item.holdback.Type__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Holdback__c.fields.Amount__c.Label}">
+                            <apex:inputfield value="{!item.holdback.Amount__c}" required="true"/>
+                        </apex:column>
+                    </apex:pageblocktable>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection rendered="{!stepNumber=6}" title="Invoices" columns="1">
+            	  <apex:outputfield value="{!Sale__c.Commission__c}" />
+                  <apex:pageblocktable value="{!ListMap['Invoices']}" var="item" id="list">
+                        <apex:facet name="footer">
+                            <apex:commandlink value="Add Invoice" action="{!addItem}" rerender="list" >
+                                <apex:param name="currentList" value="Invoices" assignTo="{!currentListType}"/>
+                            </apex:commandlink>
+                        </apex:facet>
+                        <apex:column >
+                            <apex:commandlink value="Del" action="{!deleteItem}" rerender="list" immediate="true">
+                                <apex:param name="toDelNum" value="{!item.RowNum}" assignTo="{!rowNumberForUpdate}"/>
+                                <apex:param name="currentList" value="Invoices" assignTo="{!currentListType}"/>
+                            </apex:commandlink>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Percent_Due__c.Label}">
+                            <apex:inputfield value="{!item.invoice.Percent_Due__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Due_Upon__c.Label}">
+                            <apex:inputfield value="{!item.invoice.Due_Upon__c}" required="true"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Invoice_Date__c.Label}">
+                            <apex:inputfield value="{!item.invoice.Invoice_Date__c}" required="true"/>
+                        </apex:column>
+                    </apex:pageblocktable>
+            </apex:pageBlockSection>
+            <apex:outputpanel rendered="{!stepNumber=totalSteps}">
+                <apex:pageblocksection columns="1">
+                    <apex:pageMessage summary="Booking this deal will create the invoices and commission payments and mark the deal as booked. Please review all information and then click Book Deal." severity="warning" strength="3" />
+                </apex:pageblocksection>
+                <apex:pageBlockSection title="Lease Details">
+                    <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Lease_Deal_Details}" var="f"> 
+                        <apex:outputField value="{!Sale__c[f]}" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Lease Summary">
+                      <apex:repeat value="{!$ObjectType.Sale__c.FieldSets.Book_Deal_Wizard_Lease_Summary}" var="f"> 
+                          <apex:outputField value="{!Sale__c[f]}" />
+                      </apex:repeat>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="External Agent Commissions" columns="1">
+	                  <apex:pageblocktable value="{!ListMap['ExternalCommissions']}" var="item" id="list" title="External Agents">
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Broker_Contact__c.Label}">
+	                            <apex:outputfield value="{!item.commission.Broker_contact__c}"/>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Agent_Percentage__c.Label}">
+	                            <apex:outputfield value="{!item.commission.Agent_Percentage__c}"/>
+	                        </apex:column>
+	                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+	            <apex:pageBlockSection title="Internal Agent Commissions" columns="1">
+	                    <apex:pageblocktable value="{!ListMap['InternalCommissions']}" var="item" id="list2">
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Broker__c.Label}">
+	                            <apex:outputfield value="{!item.commission.Broker__c}"/>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Commission__c.fields.Agent_Percentage__c.Label}">
+	                            <apex:outputfield value="{!item.commission.Agent_Percentage__c}"/>
+	                        </apex:column>
+	                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+	            <apex:pageBlockSection title="Commission Items" columns="1">
+                  <apex:pageblocktable value="{!ListMap['CommissionItems']}" var="item" id="list">
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Type__c.Label}">
+                            <apex:outputfield value="{!item.CommissionItem.Type__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Rent_Sq_Ft__c.Label}" rendered="{!Contains(Sale__c.Rental_Rate_Type__c,'/SF/')}">
+                            <apex:outputfield value="{!item.CommissionItem.Rent_Sq_Ft__c}" />
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Area_Sq_Ft__c.Label}" rendered="{!Contains(Sale__c.Rental_Rate_Type__c,'/SF/')}">
+                            <apex:outputfield value="{!item.CommissionItem.Area_Sq_Ft__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="Rent/Period" rendered="{!NOT(Contains(Sale__c.Rental_Rate_Type__c,'/SF/'))}">
+                            <apex:outputfield value="{!item.CommissionItem.Amount__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="# Periods">
+                            <apex:outputfield value="{!item.CommissionItem.Quantity__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.Commission_Item__c.fields.Commission_Percent__c.Label}">
+                            <apex:outputfield value="{!item.CommissionItem.Commission_Percent__c}"/>
+                        </apex:column>                        
+                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+	            <apex:pageBlockSection title="Holdbacks" columns="1">
+	                  <apex:pageblocktable value="{!ListMap['Holdbacks']}" var="item" id="list">
+	                        <apex:column headerValue="{!$ObjectType.Holdback__c.fields.Type__c.Label}">
+	                            <apex:inputfield value="{!item.holdback.Type__c}"/>
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Holdback__c.fields.Amount__c.Label}">
+	                            <apex:outputfield value="{!item.holdback.Amount__c}"/>
+	                        </apex:column>
+	                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+	            <apex:pageBlockSection title="Invoices" columns="1">
+	                  <apex:pageblocktable value="{!ListMap['Invoices']}" var="item" id="list">
+	                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Percent_Due__c.Label}">
+	                            <apex:outputfield value="{!item.invoice.Percent_Due__c}" />
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Due_Upon__c.Label}">
+	                            <apex:outputfield value="{!item.invoice.Due_Upon__c}" />
+	                        </apex:column>
+	                        <apex:column headerValue="{!$ObjectType.Invoice__c.fields.Invoice_Date__c.Label}">
+	                            <apex:outputfield value="{!item.invoice.Invoice_Date__c}" />
+	                        </apex:column>
+	                    </apex:pageblocktable>
+	            </apex:pageBlockSection>
+            </apex:outputpanel>
+        </apex:pageBlock>
+    </apex:form>
+    
+<script>
+    function calculateGrossCommission(componentId, commValCls, agentPerCls, grossCommCls ){
+        var totalAgentPercent = $('.' + agentPerCls + componentId).val();
+        var totalCommissionValue = parseFloat((($('.' + commValCls).text()).substring(1)).replace(/[^\d\.\-\ ]/g, ''));
+        var agentCommission = (totalCommissionValue*totalAgentPercent)/100;  
+        
+        if ($('.' + commValCls).text() != '')
+            $('.' + grossCommCls + componentId + ' span').text('$'+agentCommission);
+        totalPercentage();
+    }
+    
+    function totalPercentage() {
+        var totalExternalAgentPercent = 0;
+        var totalInternalAgentPercent = 0;
+        
+        $('input[class*="externalAgentPercentClass"]').each(function() {
+            if ($(this).val() != '')
+              totalExternalAgentPercent = totalExternalAgentPercent + parseFloat($(this).val());
+        } )
+        
+        $('input[class*="internalAgentPercentClass"]').each(function() {
+            if ($(this).val() != '')
+                totalInternalAgentPercent = totalInternalAgentPercent + parseFloat($(this).val());
+        } )
+        
+        var addTotalPercent = totalExternalAgentPercent+totalInternalAgentPercent;
+         
+        if(addTotalPercent != 100)
+            $('.totalPercentClass').text(addTotalPercent + '%').css("color","red");
+        else
+            $('.totalPercentClass').text(addTotalPercent + '%').css("color","green");
+    }
+    
+</script>
+
+    
+</apex:page>

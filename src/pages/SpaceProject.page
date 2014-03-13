@@ -1,0 +1,29 @@
+<apex:page standardController="Spaces__c" extensions="SpaceProjectController" action="{!createProject}" >
+
+    <apex:pagemessages />
+    <apex:detail subject="{!Spaces__c.id}" showChatter="true" relatedList="true" relatedListHover="true"/>
+    <!-- 
+    <apex:form >
+   <div class="message infoM3" style="margin:0px;height:106px;background-color:#1797c0">
+    <center>
+        <br/>
+       <br/>
+            <apex:commandbutton value="Convert to {!$ObjectType.Escrow__c.Label}" onclick="convert(2);return false;"/>&nbsp;&nbsp;
+            <apex:commandbutton value="Convert to {!$ObjectType.Sale__c.Label}" onclick="convert(1);return false;" />
+        </center>
+        </div>
+        <script>
+            function convert(type){
+                var url = '/apex/ConvertSpace?id={!Spaces__c.id}';
+                if(type == 1){
+                 url += '&p=comp';
+                }else{
+                    url += '&p=escrow';
+                }
+                window.opener.location.href = url;
+                window.close();
+            }
+        </script>
+    </apex:form>
+     -->
+</apex:page>

@@ -1,0 +1,131 @@
+<!--
+/**
+@ name          :  sfGMap
+@ author        :  ibirds Services
+@ date          :  14 May, 2011
+@ description   :  The component which wraps all the gmap scripts and code and shows the map.
+
+Change Log 
+11/10/2013 		Paul Fox		Upgraded to use Google Maps V3
+8*/
+--> 
+<apex:component >
+<apex:attribute name="width" type="integer" description="width of the map in pixcel"/>
+<apex:attribute name="height" type="integer" description="height of the map in pixcel"/>
+<apex:attribute name="addressmodel" type="AddressModel" description="all addresses need to show on map"/>
+<apex:attribute name="uselatlng" type="boolean" description="check to see if use lat lng or address"/>
+<apex:attribute name="zoom" type="integer" description="zoom level for google map"/>
+<apex:attribute name="default" type="string" description="default address where map will be center on load"/>
+<!--  Removed with v3 upgrade <script type="text/javascript" src="https://maps.google.com/maps?file=api&v=3&key=AIzaSyCpibc3stoX0r5H1SpQtP7zCpqKQXZVWnU&sensor=true"></script>  -->
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCpibc3stoX0r5H1SpQtP7zCpqKQXZVWnU&sensor=false&amp;language=en"></script> 
+<script type="text/javascript" src="{!URLFOR($Resource.gMap,'gmap/jquery-1.4.4.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.gMap,'gmap/gmap3.js')}"></script>
+
+<style>
+.sfgmap{
+    border: 1px solid #000;
+
+}
+</style>
+<div id="map" style="width:{!width}px;height:{!height}px;" class="sfgmap"></div>
+<script type="text/javascript">
+var addresses = new Array();
+var defaultaddress = '';
+if("{!default}" != ""){
+    defaultaddress = "{!default}";
+}else{
+    defaultaddress = "{!addressmodel.default}";
+}
+
+<apex:repeat value="{!addressmodel.addresslist}" var="address">
+    var addObject = new Object();
+    if("{!uselatlng}" == "false"){
+        addObject.address = "{!address.address}";
+    }else{
+        addObject.latitude = "{!address.lat}";
+        addObject.longitude = "{!address.lng}";
+    }
+    addObject.title = "{!address.info}";
+    addresses.push(addObject);
+</apex:repeat>
+$(function() {
+	
+    if(addresses.length > 1) {
+    	$('#map').gmap3({
+    			map:{
+				    options:{
+				     mapTypeControl: true,
+				     navigationControl: true,
+				     scrollwheel: true,
+				     streetViewControl: true,
+				     zoom: {!zoom}
+				    }
+				 }
+    			});
+    	for(var i=0;i<addresses.length;i++){
+    		$('#map').gmap3({ 
+    			marker:{
+    				address: addresses[i].address,
+    				data: addresses[i].title,
+    				
+    				events:{
+				      click: function(marker, event, context){
+				        var map = $(this).gmap3("get"),
+				          infowindow = $(this).gmap3({get:{name:"infowindow"}});
+				        if (infowindow){
+				          infowindow.open(map, marker);
+				          infowindow.setContent(context.data);
+				        } else {
+				          $(this).gmap3({
+				            infowindow:{
+				              anchor:marker, 
+				              options:{content: context.data}
+				            }
+				          });
+				        }
+				      },
+				    }
+    				}
+    				});
+    	}
+    	$('#map').gmap3({ autofit:{} });
+    
+       
+    } else {
+    $('#map').gmap3({ 
+    			marker:{
+    				address: defaultaddress,
+    				data: addresses[0].title,
+    				events:{
+				      click: function(marker, event, context){
+				        var map = $(this).gmap3("get"),
+				          infowindow = $(this).gmap3({get:{name:"infowindow"}});
+				        if (infowindow){
+				          infowindow.open(map, marker);
+				          infowindow.setContent(context.data);
+				        } else {
+				          $(this).gmap3({
+				            infowindow:{
+				              anchor:marker, 
+				              options:{content: context.data}
+				            }
+				          });
+				        }
+				      },
+				    }
+    				},
+    			map:{
+				    options:{
+				     mapTypeControl: true,
+				     navigationControl: true,
+				     scrollwheel: true,
+				     streetViewControl: true,
+				     zoom: {!zoom}
+				    }
+				}
+    		});
+       
+    }
+   });
+</script>
+</apex:component>

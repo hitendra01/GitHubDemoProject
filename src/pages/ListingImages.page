@@ -1,0 +1,8 @@
+<apex:page standardController="Listing__c" extensions="McLabsGalleryController">
+
+    
+        <c:McLabsGalleryCSS />
+        <c:McLabsGallery images="{!images}" />
+        <c:McLabsGalleryJavascript />  
+        
+</apex:page>

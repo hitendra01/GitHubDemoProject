@@ -1,0 +1,4 @@
+<apex:page standardController="Escrow__c" extensions="ProjectCompController" action="{!createComp}">
+    <apex:pagemessages />
+    <apex:detail subject="{!Escrow__c.id}" showChatter="true" relatedList="true" relatedListHover="true"/>
+</apex:page>

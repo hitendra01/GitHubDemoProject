@@ -1,0 +1,117 @@
+<apex:page controller="EditCommissionsController" tabStyle="Commission__c"  >
+<apex:sectionheader title="Edit Commissions" subtitle="{!parentObject.ObjectLabel}: {!parentObject.Name}"  />
+<apex:includeScript value="{!$Resource.jquery}"/>
+
+<apex:form >
+    <apex:pagemessages />
+    <apex:pageblock >
+        <apex:pageblockbuttons >
+            <apex:commandbutton value="Save" action="{!save}" /> 
+            <apex:commandbutton value="Cancel" action="{!cancel}"/>
+        </apex:pageblockbuttons>
+        <apex:pageblocksection >
+            <apex:pageblocksectionitem >
+                <apex:outputLabel for="GrossCommissions">Commissions</apex:outputLabel>
+                <apex:outputText id="GrossCommissions" styleclass="CommissionsValueStyleClass"  value="{0, number, currency}">
+				      <apex:param value="{!parentObject.commissions}" />
+				</apex:outputText>
+            </apex:pageblocksectionitem>
+        </apex:pageblocksection> 
+        <apex:pageblocksection title="External Brokers" collapsible="false" columns="1" id="ExternalCommissions">
+        	<apex:variable value="{!0}" var="rowNumber" />
+            <apex:pageblocktable title="External Commissions" value="{!ExternalCommissions}" var="com" >
+                <apex:facet name="footer">
+                    <apex:commandlink value="Add External Agent" action="{!AddExternalCommission}" rerender="ExternalCommissions" />
+                </apex:facet>
+                <apex:column headerValue="Action">
+	                <apex:commandLink action="{!removeExternalCommission}" value="Del" rerender="ExternalCommissions">
+			            <apex:param name="p1" value="{!rowNumber}" assignTo="{!numberOfRowToRemove}"/>
+			        </apex:commandLink>
+			        <apex:variable var="rowNumber" value="{!rowNumber + 1}" />
+                </apex:column>
+                <apex:column headerValue="External Agent">
+                    <apex:inputfield value="{!com.Broker_Contact__c}"/>
+                </apex:column>
+                <apex:column headerValue="Agent Percentage">
+                    <apex:inputfield value="{!com.Agent_Percentage__c}" styleClass="externalAgentPercentClass{!com.Id}"  onkeyUp="calculateGrossCommission('{!com.Id}', 'CommissionsValueStyleClass', 'externalAgentPercentClass' , 'externalAgentGrossCommisionCol'); "/>
+                </apex:column>
+                <apex:column headerValue="Agent Gross Commission" styleClass="externalAgentGrossCommisionCol{!com.Id}" >
+                    <apex:outputfield value="{!com.Agent_Gross_Commission__c}" style="display: block !important;" />
+                </apex:column>
+                
+                
+            </apex:pageblocktable>
+        
+        </apex:pageblocksection>
+        <apex:variable var="rowNumber" value="0" />
+        <apex:pageblocksection title="Internal Brokers" collapsible="false" columns="1"  id="InternalCommissions">
+        	<apex:variable value="{!0}" var="rowNumber2" />
+            <apex:pageblocktable value="{!InternalCommissions}" var="com">
+                <apex:facet name="footer">
+                    <apex:commandlink value="Add Internal Agent" action="{!AddInternalCommission}" rerender="InternalCommissions"/>
+                </apex:facet>
+                <apex:column headerValue="Action">
+                    <apex:commandLink action="{!removeInternalCommission}" value="Del"  rerender="InternalCommissions">
+			            <apex:param name="p1" value="{!rowNumber2}" assignTo="{!numberOfRowToRemove}"/>
+			        </apex:commandLink>
+			        <apex:variable var="rowNumber2" value="{!rowNumber2 + 1}" />
+                </apex:column>
+                <apex:column headerValue="Internal Agent">
+                    <apex:inputfield value="{!com.Broker__c}"/>
+                </apex:column>
+                <apex:column headerValue="Agent Percentage">
+                    <apex:inputfield value="{!com.Agent_Percentage__c}" styleClass="internalAgentPercentClass{!com.Id}"  onkeyUp="calculateGrossCommission('{!com.Id}', 'CommissionsValueStyleClass', 'internalAgentPercentClass', 'internalAgentGrossCommisionCol'); "/>
+                </apex:column>
+                <apex:column headerValue="Agent Gross Commission" styleClass="internalAgentGrossCommisionCol{!com.Id}" >
+                    <apex:outputfield value="{!com.Agent_Gross_Commission__c}" style="display: block !important;" />
+                </apex:column>
+                
+            </apex:pageblocktable>
+        
+        </apex:pageblocksection>
+        
+        <div align="center" >
+		    <apex:outputLabel for="TotalPercent" value="Total %" style="font-weight: bold;" />&nbsp;&nbsp;&nbsp;
+		    <apex:outputText style="color: {!IF((totalPercent*100) != 100 , 'red', 'green')}" styleClass="totalPercentClass" id="TotalPercent" value="{0, number, percent}">
+		        <apex:param value="{!totalPercent}" />
+		    </apex:outputText>
+	    </div>
+    </apex:pageblock>
+</apex:form>
+
+<script>
+    function calculateGrossCommission(componentId, commValCls, agentPerCls, grossCommCls ){
+        var totalAgentPercent = $('.' + agentPerCls + componentId).val();
+        var totalCommissionValue = parseFloat((($('.' + commValCls).text()).substring(1)).replace(/[^\d\.\-\ ]/g, ''));
+        var agentCommission = (totalCommissionValue*totalAgentPercent)/100; 
+        
+         if ($('.' + commValCls).text() != '')
+            $('.' + grossCommCls + componentId + ' span').text('$'+agentCommission);
+        totalPercentage();
+    }
+    
+    function totalPercentage() {
+        var totalExternalAgentPercent = 0;
+        var totalInternalAgentPercent = 0; 
+        
+        $('input[class*="externalAgentPercentClass"]').each(function() {
+            if ($(this).val() != '')
+		      totalExternalAgentPercent = totalExternalAgentPercent + parseFloat($(this).val());
+		} )
+		
+		$('input[class*="internalAgentPercentClass"]').each(function() {
+		    if ($(this).val() != '')
+                totalInternalAgentPercent = totalInternalAgentPercent + parseFloat($(this).val());
+        } )
+        
+        var addTotalPercent = totalExternalAgentPercent+totalInternalAgentPercent;
+		 
+		if(addTotalPercent != 100)
+            $('.totalPercentClass').text(addTotalPercent + '%').css("color","red");
+		else
+		    $('.totalPercentClass').text(addTotalPercent + '%').css("color","green");
+    }
+    
+</script>
+
+</apex:page>

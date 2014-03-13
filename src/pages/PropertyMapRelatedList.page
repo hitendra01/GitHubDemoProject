@@ -1,0 +1,22 @@
+<!--
+/*
+Riptide Software
+
+@auther: Trey Dickson
+@description: Page for displaying a google map with multiple properties for an individual contact. This component is written for Google Maps API v2, it will cease to function in May 2013 if it is not rewritten in Api v3.
+*/
+-->
+<apex:page controller="PropertyMapRelatedListController" showHeader="false" sidebar="false">
+<apex:outputPanel rendered="{!notFound}">
+<p>
+Some or all of the addresses could not be located.
+</p>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showMap}">
+<c:sfGMap height="650" addressmodel="{!addressmodel}" zoom="14" uselatlng="false">
+</c:sfGMap>
+</apex:outputPanel>
+
+
+
+</apex:page>

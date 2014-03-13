@@ -1,0 +1,231 @@
+<apex:component controller="InvoicePDFController" access="global">
+	<apex:attribute name="Invoice_Id" type="String" description="Specifies which Invoice to use" access="global" required="true" assignTo="{!InvoiceId}" />
+
+
+<head>
+    <style type="text/css">
+    body {
+        font-family: open sans, sans-serif;
+        color : rgb(76, 76, 76);
+    }
+    .header {
+
+    }
+    .header .logo {
+        min-height: 63px;
+        display: inline-block;
+        width: 200px;
+        padding-left: 45px;
+        padding-bottom: 8px;
+    }
+    .header .company-info {
+        float: right;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 11px; // spec said 8 but pdf measured different
+        line-height: 18px; // spec said 13 but measured 11 between lines
+        margin-right: 20px;
+        width: 200px;
+    }
+    hr {
+        border: 0;
+        height: 2px;
+        background-color: rgb(215, 215, 215);
+        margin-bottom: 30px;
+    }
+    .from {
+        display: inline-block;
+    }
+    .from h3 {
+        display: inline;
+        text-transform:uppercase; 
+        border-bottom: 2px solid rgb(215, 215, 215);
+        color: #047fbc;
+        font-size: 17px;
+        font-weight: normal;
+        padding-bottom: 9px;
+    }
+    .from p {
+        margin-top: 23px;
+        font-size: 13px;
+        line-height: 19px;
+    }
+    .invoice {
+        float: right;
+        text-transform: uppercase;
+        font-size: 25px;
+    }
+    .invoice-info {
+        float: right;
+    }
+    table.items {
+        font-size: 12px; 
+        width: 100%; 
+        border: 1px solid rgb(227, 227, 227); 
+        border-collapse: collapse;
+        padding: 0px; 
+        margin: 0px;
+        border-spacing: 1px;
+    }
+    table.items th {
+        padding-top: 6px;
+        border-style: 1px solid rgb(243, 243, 243);
+    }
+    table.items td {
+        padding-top: 4px;
+        padding-bottom: 8px;
+        padding-left: 7px;
+        border-style: 1px solid rgb(243, 243, 243);
+    }
+    table.items tr:nth-child(even) {
+        background: rgb(235, 235, 235);
+    }
+    </style>
+</head>
+<body>
+    <div style="padding: 10px;">
+        <div class="header">
+            <div class="logo">
+                (swirl) apto
+            </div>
+            <div class="company-info">
+                APTO<br/>
+                2170 Buckthorne Place<br/>
+                Suite 220<br/>
+                The Woodlands, TX 77380
+            </div>
+        </div>
+        <hr/>
+        <div class="from">
+            <h3>Jeff Dunbar</h3>
+            <p>
+            <b>ABC Properties</b><br/>
+            111 Flamingo St.<br/>
+            Houston, TX 78378
+            </p>
+        </div>
+        <div class="invoice" style="float: right;
+        text-transform: uppercase;
+        font-size: 25px; font-family: sans-serif;">
+            Invoice
+        </div>
+        <div class="invoice-info">
+            Invoice Number
+            Invoice Date
+            Invoice Due Date
+        </div>
+        <div>
+            Leased to: Universal Containers
+            Property: 123 Main St.
+        </div>
+
+        <table class="items">
+            <thead style="background-color: rgb(221, 221, 221); padding-top: 10px;">
+                <tr style="">
+                    <th>Period</th>
+                    <th>Rent/Sq. Ft.</th>
+                    <th>Area</th>
+                    <th>Rent/Period</th>
+                    <th>Commission on<br/>the Rent</th>
+                    <th>Total Commission</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>$54.00</td>
+                    <td>4,130</td>
+                    <td>$5,000.00</td>
+                    <td>5.0%</td>
+                    <td>$250.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>$54.00</td>
+                    <td>4,130</td>
+                    <td>$5,000.00</td>
+                    <td>5.0%</td>
+                    <td>$250.00</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>$54.00</td>
+                    <td>4,130</td>
+                    <td>$5,000.00</td>
+                    <td>5.0%</td>
+                    <td>$250.00</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>$54.00</td>
+                    <td>4,130</td>
+                    <td>$5,000.00</td>
+                    <td>5.0%</td>
+                    <td>$250.00</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>$54.00</td>
+                    <td>4,130</td>
+                    <td>$5,000.00</td>
+                    <td>5.0%</td>
+                    <td>$250.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+	
+	
+	
+	
+	<!-- 
+	<apex:stylesheet value="{!URLFOR($Resource.InvoiceStyles)}" /> 
+	<table width="100%">
+		<tr>
+			<td width="50%">
+				Company Logo
+			</td>
+			<td width="50%" textalign="right">
+				{!$Organization.Name}<br/>
+				{!$Organization.Street}<br/>
+				{!$Organization.City}, {!$Organization.State} {!$Organization.PostalCode} <br/>
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table width="100%">
+		<tr>
+			<td width="50%">
+				Recipient Info
+			</td>
+			<td width="50%" textalign="right">
+				<table>
+					<tr>
+						<td colspan="2">Invoice</td>
+					</tr>
+					<tr>
+						<td>Invoice Number</td>
+						<td textalign="right">{!invoice.Name}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	Property information
+	
+	Commission Items
+	<table width="100%" class="lineitems">
+		<th>
+			
+		</th>
+		<apex:repeat value="{!CommissionItems}" var="item">
+			<tr>
+				<td>{!item.Name}</td>
+			</tr>
+		</apex:repeat>
+	</table>
+	
+	Payment Terms 
+	-->
+</apex:component>

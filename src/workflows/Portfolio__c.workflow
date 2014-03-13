@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>UpdateSqFt</fullName>
+        <field>Square_Footage2__c</field>
+        <formula>Property__r.Square_Footage__c</formula>
+        <name>UpdateSqFt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>true</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>UpdateUnits</fullName>
+        <field>Units__c</field>
+        <formula>Property__r.Units__c</formula>
+        <name>UpdateUnits</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>true</protected>
+    </fieldUpdates>
+    <rules>
+        <fullName>UpdatePortfolioSize</fullName>
+        <actions>
+            <name>UpdateSqFt</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>UpdateUnits</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>Portfolio__c.Square_Footage2__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Portfolio__c.Units__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

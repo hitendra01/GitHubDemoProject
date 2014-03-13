@@ -1,0 +1,3 @@
+<apex:page standardController="Spaces__c">
+<apex:detail subject="{!Spaces__c.id}" showChatter="true" inlineEdit="true" />
+</apex:page>

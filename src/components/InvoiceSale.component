@@ -1,0 +1,48 @@
+<apex:component controller="InvoicePDFController" access="global">
+	<apex:attribute name="Invoice_Id" type="String" description="Specifies which Invoice to use" access="global" required="true" assignTo="{!InvoiceId}" />
+	Sale Invoice
+	<table width="100%">
+		<tr>
+			<td width="50%">
+				Company Logo
+			</td>
+			<td width="50%" textalign="right">
+				Company Address
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table width="100%">
+		<tr>
+			<td width="50%">
+				Recipient Info
+			</td>
+			<td width="50%" textalign="right">
+				<table>
+					<tr>
+						<td colspan="2">Invoice</td>
+					</tr>
+					<tr>
+						<td>Invoice Number</td>
+						<td textalign="right">{!invoice.Name}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	Property information
+	
+	Commission Items
+	<table width="100%" class="lineitems">
+		<th>
+			
+		</th>
+		<apex:repeat value="{!CommissionItems}" var="item">
+			<tr>
+				<td>{!item.Name}</td>
+			</tr>
+		</apex:repeat>
+	</table>
+	
+	Payment Terms 
+</apex:component>

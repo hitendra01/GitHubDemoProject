@@ -1,0 +1,24 @@
+<apex:page standardController="Property__c" extensions="PropertySpacesController" >
+  <!-- Begin Default Content REMOVE THIS -->
+  
+  <apex:datatable value="{!SpacesByFloor}" var="floor" >
+      <apex:column value="{!floor}">
+          <apex:facet name="header">Floor</apex:facet>
+      </apex:column>
+      <apex:column value="{!SquareFootagebyFloor[floor]}">
+          <apex:facet name="header">Sq Ft</apex:facet>
+      </apex:column>
+      <apex:column >
+          <apex:facet name="header">Spaces</apex:facet>
+          <table width="100%">
+          <tr>
+          <apex:repeat value="{!SpacesByFloor[floor]}" var="space">
+              <td width="{!Round(space.Square_Footage__c/SquareFootagebyFloor[floor]*100,1)}%">
+                  Office {!space.Suite_Floor__c} ({!space.Square_Footage__c} sq ft)
+              </td>
+          </apex:repeat>
+          </tr></table>
+      </apex:column>
+  </apex:datatable>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

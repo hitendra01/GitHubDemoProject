@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Agent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Agent</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Commission_Plans</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Plan__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Plan</label>
+        <referenceTo>Commission_Plan__c</referenceTo>
+        <relationshipLabel>Members</relationshipLabel>
+        <relationshipName>Members</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Date_for_Previous_Gross_Commissions__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the date to use when figuring out how to apply the Previous Gross Commissions. In most cases this will be today&apos;s date so that the gross commissions are used to calculate net commissions for everything from today forward for the current FY.</inlineHelpText>
+        <label>Date for Previous Gross Commissions</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Previous_Gross_Commissions__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter any Gross Commissions paid that were not tracked in Apto. This will ensure that future Net Commissions are calculated correctly.</inlineHelpText>
+        <label>Previous Gross Commissions</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <label>Commission Plan Member</label>
+    <nameField>
+        <displayFormat>CPM-{00000}</displayFormat>
+        <label>Member ID</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Commission Plan Members</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

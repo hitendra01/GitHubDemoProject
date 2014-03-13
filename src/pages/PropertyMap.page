@@ -1,0 +1,18 @@
+<!--
+/**
+@ name          :  PropertyMap
+@ author        :  iBirds Services
+@ date          :  14 May, 2011
+@ description   :  The Property Object's page which is used to show the address of particular property. This component is written for Google Maps API v2, it will cease to function in May 2013 if it is not rewritten in Api v3.
+*/
+-->
+
+<apex:page standardController="Property__c" extensions="PropertyMapcontroller" sidebar="false" showHeader="false">
+<apex:outputPanel rendered="{!showMap}">
+<c:sfGMap width="425" height="400" addressmodel="{!addressmodel}" zoom="14" uselatlng="false">
+</c:sfGMap>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!NOT(showMap)}">
+<apex:pageMessage title="Could not map this address." summary="{!addressmodel.Default}" severity="info" strength="3" />
+</apex:outputPanel>
+</apex:page>

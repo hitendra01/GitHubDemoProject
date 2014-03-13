@@ -1,0 +1,4 @@
+<apex:page standardController="Spaces__c" extensions="SpaceProjectController" action="{!createComp}">
+    <apex:pagemessages />
+    <apex:detail subject="{!Spaces__c.id}" relatedList="true" showChatter="true" relatedListHover="true" inlineEdit="true" title="true" />
+</apex:page>

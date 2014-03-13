@@ -1,0 +1,4 @@
+<apex:page standardController="Listing__c" extensions="AssignmentProjectController" action="{!createProject}">
+    <apex:pagemessages />
+    <apex:detail subject="{!Listing__c.id}" showChatter="true" relatedList="true" relatedListHover="true"/>
+</apex:page>

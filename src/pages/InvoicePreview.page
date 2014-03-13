@@ -1,0 +1,213 @@
+<apex:page standardController="Invoice__c" 
+           extensions="InvoicePDFController"
+           standardStylesheets="false" 
+           showHeader="false"
+           applyBodyTag="false"
+           renderAs="pdf"
+           title="Invoice {!Invoice__c.Name}" > 
+<!-- 
+  using components injects "JiffyStubs.js" into html, a known bug per pat patterson (aka metadaddy):
+  http://salesforce.stackexchange.com/questions/16974/how-to-deal-with-jiffystubs-js-the-html5-application-cache-and-network-latency
+  
+  <c:InvoiceSale Invoice_Id="{!Invoice__c.Id}" rendered="{!Invoice__c.Comp_Type__c=='Sale'}"/>
+  <c:InvoiceLease Invoice_Id="{!Invoice__c.Id}" rendered="{!Invoice__c.Comp_Type__c=='Lease'}"/>
+-->
+
+<head>
+    <style type="text/css"> 
+    //reset
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    body {
+        font-family: open sans, sans-serif;
+        color : rgb(76, 76, 76);
+    }
+    .half {
+        display: inline-block;
+        width: 349px;
+        //background-color: yellow;
+        vertical-align: top;
+    }
+    .header {
+        border-bottom: 2px solid rgb(215, 215, 215);
+        margin-bottom: 25px;
+    }
+    .header .logo {
+        min-height: 63px;
+        padding-bottom: 8px;
+    }
+    .header .company-info {
+        font-family: sans-serif;
+        font-size: 11px;
+        line-height: 17px;
+        margin-left: 150px;
+        margin-bottom: 15px;
+    }
+    .from {
+    }
+    .from h3 {
+        display: inline;
+        text-transform:uppercase; 
+        border-bottom: 2px solid rgb(215, 215, 215);
+        color: #047fbc;
+        font-size: 17px;
+        font-weight: normal;
+        padding-bottom: 9px;
+    }
+    .from p {
+        margin-top: 23px;
+        font-size: 12px;
+        line-height: 19px;
+    }
+    .invoice {
+        text-transform: uppercase;
+        font-size: 25px;
+    }
+    .invoice-info {
+        margin-top: 10px;
+        font-size: 12px;
+        text-align: left;
+    }
+    .invoice-info td {
+        left-padding: 10px;
+    }
+    .leased-to {
+        font-size: 12px;
+        
+    }
+    table.items {
+        font-size: 12px; 
+        width: 100%; 
+        border: 1px solid rgb(227, 227, 227); 
+        border-collapse: collapse;
+        border-spacing: 1px;
+        margin-top: 18px;
+    }
+    table.items th {
+        padding-top: 6px;
+        padding-left: 12px;
+        border-style: 1px solid rgb(243, 243, 243);
+    }
+    table.items td {
+        padding-top: 4px;
+        padding-bottom: 8px;
+        padding-left: 12px;
+        border-style: 1px solid rgb(243, 243, 243);
+    }
+    /* does not work in salesforce pdf rendering, have to do it manually
+    table.items tr:nth-child(even) {
+        background: rgb(235, 235, 235);
+    }
+    */
+    table.items tr.subtotal {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    tr.subtotal td:first-child {
+        text-align: right;
+    }
+    .notes {
+        font-size: 12px;
+    }
+    </style>
+</head>
+<body>
+    <div style="">
+        <div class="header">
+            <div class="logo half">
+<!--                 <img src="https://c.na11.content.force.com/servlet/servlet.ImageServer?id=015G0000005Fbsh&oid=00DG0000000l3Wm&lastMod=1391451844000" alt="Logo" /> -->
+            <img src="{!companyLogoUrl}" alt="Logo" />
+            </div>
+            <div class="half">
+                <div class="company-info">
+                    {!$Organization.Name}<br/>
+                    {!$Organization.Street}<br/>
+                    {!$Organization.City}, {!$Organization.State} {!$Organization.PostalCode}
+                </div>
+            </div>
+        </div>
+        <div class="half">
+            <div class="from">
+                <h3>{!Invoice__c.Recipient__r.FirstName} {!Invoice__c.Recipient__r.LastName}</h3>
+                <p>
+                <b>{!Invoice__c.Recipient__r.Account.Name}</b><br/>
+                {!Invoice__c.Recipient__r.Account.BillingStreet}<br/>
+                {!Invoice__c.Recipient__r.Account.BillingCity}, {!Invoice__c.Recipient__r.Account.BillingState} {!Invoice__c.Recipient__r.Account.BillingPostalCode}
+                </p>
+            </div>
+            <div class="leased-to">
+                <b>Leased to: {!Invoice__c.Comp__r.Tenant__r.Name}</b><br/>
+                Property: {!Invoice__c.Comp__r.Property_Address__c}
+            </div>
+        </div>
+        <div class="half" style="text-align: right;">
+            <div class="invoice">
+                Invoice
+            </div>
+            <div class="invoice-info">
+                <table align="right">
+                    <tr><td>Invoice Number</td><td>{!Invoice__c.name}</td></tr>
+                    <tr><td>Invoice Date</td><td><apex:outputfield value="{!Invoice__c.Invoice_Date__c}"/></td></tr>
+                    <tr><td>Invoice Due Date</td><td><apex:outputfield value="{!Invoice__c.Due_Date__c}"/></td></tr>
+                </table>
+            </div>
+        </div>
+        
+        
+        
+        <table class="items">
+            <thead style="background-color: rgb(221, 221, 221); padding-top: 10px;">
+                <tr style="">
+                    <th>Line Item</th>
+                    <th style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}">Rent/Sq. Ft.</th>
+                    <th style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}">Area</th>
+                    <th>Rent/Period</th>
+                    <th>Periods</th>
+                    <th style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}">Total Rent</th>
+                    <th>Commission (%)</th>
+                    <th>Commission ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+            <apex:repeat value="{!commissionitems}" var="item">
+                <tr>
+                    <td>{!item.Order__c}</td>
+                    <td style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}"><apex:outputfield value="{!item.Rent_Sq_Ft__c}" /></td>
+                    <td style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}"><apex:outputfield value="{!item.Area_Sq_Ft__c}" /></td>
+                    <td><apex:outputfield value="{!item.Amount__c}"/></td>
+                    <td><apex:outputfield value="{!item.Quantity__c}"/></td>
+                    <td style="display: {!IF(isSaleRecordType == true, 'none', 'inline-flex')}"><apex:outputfield value="{!item.Total__c}" /></td>
+                    <td><apex:outputfield value="{!item.Commission_Percent__c}"/></td>
+                    <td><apex:outputfield value="{!item.Commission_Amount__c}"/></td>
+                </tr>
+            </apex:repeat>
+                <tr class="subtotal">
+                    <td colspan="7">Total</td>
+                    <td><apex:outputfield value="{!Invoice__c.Total_Commissions__c}"/></td>
+                </tr>
+                <tr class="subtotal">
+                    <td colspan="7">Due Now</td>
+                    <td><apex:outputfield value="{!Invoice__c.Subtotal__c}"/></td>
+                </tr>
+                <apex:outputpanel rendered="{!NOT(ISBLANK(Invoice__c.Tax__c))&&Invoice__c.Tax__c>0}" layout="none">
+                <tr class="subtotal">
+                    <td colspan="7">Tax</td>
+                    <td><apex:outputfield value="{!Invoice__c.Tax__c}"/></td>
+                </tr>
+                <tr class="subtotal">
+                    <td colspan="7">Total Due</td>
+                    <td><apex:outputfield value="{!Invoice__c.Total_Due__c}"/></td>
+                </tr>
+                    </apex:outputpanel>
+            </tbody>
+        </table>
+        
+        <div class="notes half">
+            <h3>Payment Instructions</h3>
+            Please make check payable to {!$Organization.Name}.
+        </div>
+    </div>
+</body>
+</apex:page>

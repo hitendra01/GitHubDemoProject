@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>A list of items that are used to calculate commissions. For example, in a lease comp this will be made up of all of the rent times the commission percent for each lease period.</description>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Amount__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The total consideration for this line item.</inlineHelpText>
+        <label>Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Area_Sq_Ft__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The size of the space in square feet.</inlineHelpText>
+        <label>Area (Sq Ft)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Commission_Amount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Total__c * Commission_Percent__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission ($)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Percent__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission (%)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Comp__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Comp</label>
+        <referenceTo>Sale__c</referenceTo>
+        <relationshipLabel>Commission Items</relationshipLabel>
+        <relationshipName>Commission_Items</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The order that this item will show up on the Comp and the Invoice</inlineHelpText>
+        <label>Order</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity__c</fullName>
+        <externalId>false</externalId>
+        <label>Quantity</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Rent_Sq_Ft__c</fullName>
+        <externalId>false</externalId>
+        <label>Rent/Sq Ft</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>Amount__c *  Quantity__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>$/SF/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>$/SF/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>% of Sale Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>% of  Flat Fee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Negotiated Fee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other Brokerage Fee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bonus per Square Feet</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <label>Commission Item</label>
+    <nameField>
+        <displayFormat>Item-{00000}</displayFormat>
+        <label>Item ID</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Commission Items</pluralLabel>
+    <recordTypes>
+        <fullName>Lease</fullName>
+        <active>true</active>
+        <label>Lease</label>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>%24%2FSF%2FMonth</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>%24%2FSF%2FYear</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Amount%2FMonth</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Amount%2FYear</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bonus per Square Feet</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Negotiated Fee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other Brokerage Fee</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Sale</fullName>
+        <active>true</active>
+        <label>Sale</label>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>%25 of  Flat Fee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>%25 of Sale Price</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bonus per Square Feet</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Negotiated Fee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other Brokerage Fee</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

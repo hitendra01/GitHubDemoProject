@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Amount_Month__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Year&quot;, (Asking_Rate_PSF__c * Square_Footage__c)/12 , IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Month&quot;, (Asking_Rate_PSF__c * Square_Footage__c), IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Month&quot;, Asking_Rate_PSF__c, IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Year&quot;, Asking_Rate_PSF__c / 12 ,0))))</formula>
+        <label>Amount/Month</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Amount_Year__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Year&quot;, Asking_Rate_PSF__c *  Square_Footage__c , IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Month&quot;, (Asking_Rate_PSF__c *  Square_Footage__c) * 12, IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Year&quot;, Asking_Rate_PSF__c, IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Month&quot;, Asking_Rate_PSF__c * 12 ,0))))</formula>
+        <label>Amount/Year</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Asking_Rate_PSF__c</fullName>
+        <externalId>false</externalId>
+        <label>Rental Rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Available__c</fullName>
+        <defaultValue>true</defaultValue>
+        <externalId>false</externalId>
+        <label>Available?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>City__c</fullName>
+        <externalId>false</externalId>
+        <formula>Property__r.City__c</formula>
+        <label>City</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Commission_Factor__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(  Available__c  == true , SF_Month__c * Square_Footage__c * Lease_Term_Months__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Factor</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Current_Lease__c</fullName>
+        <externalId>false</externalId>
+        <label>Current Lease</label>
+        <picklist>
+            <picklistValues>
+                <fullName>N/A</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NNN</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified Gross</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified Net</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial Gross</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Current_Rental_Rate_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Current Rental Rate Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>$/SF/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>$/SF/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>None</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Current_Rental_Rate__c</fullName>
+        <externalId>false</externalId>
+        <label>Current Rental Rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Current_Tenant__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Current Tenant</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Spaces</relationshipLabel>
+        <relationshipName>Spaces</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Date_Available__c</fullName>
+        <externalId>false</externalId>
+        <label>Date Available</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>External_ID__c</fullName>
+        <externalId>true</externalId>
+        <label>External ID</label>
+        <length>99</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Landlord_Representation_Assignment__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Landlord Representation Listing</label>
+        <referenceTo>Listing__c</referenceTo>
+        <relationshipLabel>Spaces</relationshipLabel>
+        <relationshipName>Spaces</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Lease_Expiration_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Lease Expiration Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Lease_Term_Months__c</fullName>
+        <externalId>false</externalId>
+        <label>Lease Term (Months)</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lease_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Lease Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>N/A</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NNN</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified Gross</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified Net</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial Gross</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Location_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Location Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Market__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( Property__r.Market__c )</formula>
+        <label>Market</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Maximum_Contiguous__c</fullName>
+        <externalId>false</externalId>
+        <label>Maximum Contiguous</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Minimum_Divisible__c</fullName>
+        <externalId>false</externalId>
+        <label>Minimum Divisible</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Project_Leasing__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Project Leasing</label>
+        <referenceTo>Project_Leasing__c</referenceTo>
+        <relationshipLabel>Spaces</relationshipLabel>
+        <relationshipName>Spaces</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Property_Address__c</fullName>
+        <externalId>false</externalId>
+        <formula>Property__r.Property_Address__c</formula>
+        <label>Property Address</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Property_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Property Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Property_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Space Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Office</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Special Purpose</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Property__c</fullName>
+        <externalId>false</externalId>
+        <label>Property</label>
+        <referenceTo>Property__c</referenceTo>
+        <relationshipLabel>Spaces</relationshipLabel>
+        <relationshipName>Spaces</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>true</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Rental_Rate_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Rental Rate Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>$/SF/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>$/SF/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Year</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Amount/Month</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>None</fullName>
+                <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SF_Month__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Month&quot;, Asking_Rate_PSF__c , IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Year&quot;, Asking_Rate_PSF__c / 12, IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Year&quot;, (Asking_Rate_PSF__c/ Square_Footage__c)/12 , IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Month&quot;, (Asking_Rate_PSF__c )/ Square_Footage__c ,0))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>$/SF/Month</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SF_Year__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Year&quot;,  Asking_Rate_PSF__c , IF( TEXT(Rental_Rate_Type__c) = &quot;$/SF/Month&quot;, Asking_Rate_PSF__c * 12, IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Year&quot;, Asking_Rate_PSF__c/ Square_Footage__c , IF( TEXT(Rental_Rate_Type__c) = &quot;Amount/Month&quot;, (Asking_Rate_PSF__c * 12)/ Square_Footage__c ,0))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>$/SF/Year</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Space_Sub_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Space Sub-Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>None</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Flex Space</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Manufacturing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Office Showroom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- R&amp;D</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Truck Terminal/Hub</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Warehouse</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Distribution Warehouse</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Industrial- Refrigerated/Cold Storage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Industrial</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Multifamily</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Office</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Residential</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Retail</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Land- Commercial(Other)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Office- Creative/Loft</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Office- Office Building</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Office- Governmental</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Office- Medical Office</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Office- R&amp;D</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Restaurant</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Freestanding Building</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Retail (Other)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Vehicle Related</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Pad</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Anchor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Community Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Strip Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Specialty Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Neighborhood Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Outlet Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Regional Center/Mall</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retail- Super Regional Center</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Square_Footage__c</fullName>
+        <externalId>false</externalId>
+        <label>Available Square Footage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>State__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Property__r.State__c)</formula>
+        <label>State</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Available</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Leased</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Sublease__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Sublease?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Submarket__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT( Property__r.Submarket__c )</formula>
+        <label>Submarket</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Suite_Floor__c</fullName>
+        <externalId>false</externalId>
+        <label>Suite/Floor #</label>
+        <length>20</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Zip_Postal_Code__c</fullName>
+        <externalId>false</externalId>
+        <formula>Property__r.Zip_Code__c</formula>
+        <label>Zip/Postal Code</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Space</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Industrial</fullName>
+        <columns>Property__c</columns>
+        <columns>Square_Footage__c</columns>
+        <columns>Date_Available__c</columns>
+        <columns>SF_Month__c</columns>
+        <columns>SF_Year__c</columns>
+        <columns>Amount_Month__c</columns>
+        <columns>Amount_Year__c</columns>
+        <columns>Lease_Type__c</columns>
+        <columns>Lease_Term_Months__c</columns>
+        <columns>Market__c</columns>
+        <columns>Maximum_Contiguous__c</columns>
+        <columns>Minimum_Divisible__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Property_Type__c</field>
+            <operation>equals</operation>
+            <value>Industrial</value>
+        </filters>
+        <label>Industrial</label>
+    </listViews>
+    <listViews>
+        <fullName>Office</fullName>
+        <columns>NAME</columns>
+        <columns>Property__c</columns>
+        <columns>Square_Footage__c</columns>
+        <columns>Date_Available__c</columns>
+        <columns>SF_Month__c</columns>
+        <columns>SF_Year__c</columns>
+        <columns>Amount_Month__c</columns>
+        <columns>Amount_Year__c</columns>
+        <columns>Lease_Type__c</columns>
+        <columns>Lease_Term_Months__c</columns>
+        <columns>Market__c</columns>
+        <columns>Maximum_Contiguous__c</columns>
+        <columns>Minimum_Divisible__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Property_Type__c</field>
+            <operation>equals</operation>
+            <value>Office</value>
+        </filters>
+        <label>Office</label>
+    </listViews>
+    <listViews>
+        <fullName>Retail</fullName>
+        <columns>Property__c</columns>
+        <columns>Square_Footage__c</columns>
+        <columns>Date_Available__c</columns>
+        <columns>SF_Month__c</columns>
+        <columns>SF_Year__c</columns>
+        <columns>Amount_Month__c</columns>
+        <columns>Amount_Year__c</columns>
+        <columns>Lease_Type__c</columns>
+        <columns>Lease_Term_Months__c</columns>
+        <columns>Market__c</columns>
+        <columns>Maximum_Contiguous__c</columns>
+        <columns>Minimum_Divisible__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Property_Type__c</field>
+            <operation>equals</operation>
+            <value>Retail</value>
+        </filters>
+        <label>Retail</label>
+    </listViews>
+    <nameField>
+        <displayFormat>A-{000000}</displayFormat>
+        <label>Spaces Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Spaces</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Suite_Floor__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Property__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Square_Footage__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>SF_Month__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>SF_Year__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Amount_Month__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Amount_Year__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Lease_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Property_Type__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>SF_Month__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>SF_Year__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Amount_Month__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Amount_Year__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Square_Footage__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Lease_Type__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>SF_Month__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>SF_Year__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Amount_Month__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Amount_Year__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Square_Footage__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Lease_Type__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>SF_Month__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>SF_Year__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Amount_Month__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Amount_Year__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Square_Footage__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Lease_Type__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Fixed_Rental_Rate_Type_Picklist</fullName>
+        <active>false</active>
+        <errorConditionFormula>Not ( OR (TEXT( 
+Rental_Rate_Type__c ) =&quot;Amount/Year&quot;,  TEXT( Rental_Rate_Type__c ) =&quot;Amount/Month&quot;,  TEXT( Rental_Rate_Type__c ) =&quot;$/SF/Month&quot;,  TEXT( Rental_Rate_Type__c ) =&quot;$/SF/Year&quot;, TEXT(
+Rental_Rate_Type__c ) =&quot;None&quot;))</errorConditionFormula>
+        <errorDisplayField>Rental_Rate_Type__c</errorDisplayField>
+        <errorMessage>Do not modify this picklist. It&apos;s values are used for alternate calculations</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Rental_Rate_Type_Cannot_Equal_None</fullName>
+        <active>true</active>
+        <errorConditionFormula>TEXT (Rental_Rate_Type__c) = &quot;None&quot;</errorConditionFormula>
+        <errorDisplayField>Rental_Rate_Type__c</errorDisplayField>
+        <errorMessage>Rental Rate Type Cannot Equal None</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Convert_Comp</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Convert Comp</masterLabel>
+        <openType>replace</openType>
+        <page>ConvertSpace</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Project</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Convert Project</masterLabel>
+        <openType>replace</openType>
+        <page>SpaceProject</page>
+        <protected>false</protected>
+    </webLinks>
+</CustomObject>

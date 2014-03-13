@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Agent_Split__c</fullName>
+        <externalId>false</externalId>
+        <label>Agent Split</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Broker_Id__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Commission__r.RecordType.DeveloperName = &quot;External&quot;,
+ Commission__r.Broker_Contact__c ,
+ Commission__r.Broker__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Broker Id</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Broker__c</fullName>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(
+&apos;/&apos; +  Broker_Id__c ,
+IF( Commission__r.RecordType.DeveloperName = &quot;External&quot;, 
+ Commission__r.Broker_Contact__r.FirstName + &apos; &apos; + Commission__r.Broker_Contact__r.LastName,
+ Commission__r.Broker__r.FirstName + &apos; &apos; +  Commission__r.Broker__r.LastName ),
+&quot;_parent&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Broker</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Commission_Calculation_Details__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Calculation Details</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Commission_Record_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>Commission__r.RecordType.DeveloperName</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Record Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Commission__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission</label>
+        <referenceTo>Commission__c</referenceTo>
+        <relationshipName>Commission_Payables</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Date_Processed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The date that was used when the net commissions were calculated. This is used to know what period the commission applies to.</inlineHelpText>
+        <label>Date Processed</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Gross_Commission_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>Commission__r.Agent_Gross_Commission__c *  Invoice__r.Percent_Due__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The agent gross commission times the percent due from the invoice.</inlineHelpText>
+        <label>Gross Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Gross_Commission__c</fullName>
+        <externalId>false</externalId>
+        <label>Gross Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Paid__c</fullName>
+        <externalId>false</externalId>
+        <formula>Invoice__r.Paid__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Invoice Paid</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Invoice__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Invoice</label>
+        <referenceTo>Invoice__c</referenceTo>
+        <relationshipLabel>Commission Payments</relationshipLabel>
+        <relationshipName>Commission_Payables</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Net_Commission__c</fullName>
+        <externalId>false</externalId>
+        <label>Net Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Paid__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Paid</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Commission Payment</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>To_Be_Paid</fullName>
+        <columns>NAME</columns>
+        <columns>Commission__c</columns>
+        <columns>Commission_Record_Type__c</columns>
+        <columns>Net_Commission__c</columns>
+        <columns>Paid__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Invoice_Paid__c</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <filters>
+            <field>Paid__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>To Be Paid</label>
+    </listViews>
+    <nameField>
+        <displayFormat>CP-{00000}</displayFormat>
+        <label>Payable ID</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Commission Payments</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

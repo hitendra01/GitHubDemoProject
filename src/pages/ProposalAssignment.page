@@ -1,0 +1,5 @@
+<apex:page standardController="Proposal__c" extensions="ProposalAssignmentController" action="{!createAssignment}">
+	<apex:pagemessages />
+	<apex:detail subject="{!Proposal__c.id}" showChatter="true" relatedList="true" relatedListHover="true"/>
+	
+</apex:page>

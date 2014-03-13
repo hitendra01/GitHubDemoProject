@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Public</customSettingsVisibility>
+    <description>Proposal to Assignment Record type mapping</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AssignmentRecordType__c</fullName>
+        <description>Assignment Record type Name</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Assignment Record type Name</inlineHelpText>
+        <label>Assignment RecordType</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Proposal Record Type Mapping</label>
+</CustomObject>

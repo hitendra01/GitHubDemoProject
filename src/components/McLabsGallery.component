@@ -1,0 +1,41 @@
+<apex:component >
+	<apex:attribute name="images" description="Images." type="List" required="true"/>
+
+
+
+		<div class="bg_image"></div>
+		<div id="loader" class="loader"></div>
+		<div class="wrapper">
+			<div id="ps_container" class="ps_container">
+				<div class="ps_image_wrapper" style="max-width:365px;max-height:400px;height:100%;width:100%;">
+					<!-- First initial image -->
+					<img src="{!images[0]}" alt="" style="max-width:365px;max-height:400px;" />
+				</div>
+				<!-- Navigation items -->
+				<div class="ps_next"></div>
+				<div class="ps_prev"></div>
+				<!-- Dot list with thumbnail preview -->
+				<ul class="ps_nav">
+					<apex:repeat value="{!images}" var="i">
+						<li>
+							<a href="{!i}" rel="{!i}"></a>
+						</li>
+					</apex:repeat>
+					<li class="ps_preview">
+						<div class="ps_preview_wrapper" >
+							<!-- Thumbnail comes here -->
+						</div>
+						<!-- Little triangle -->
+						<span></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		
+
+
+
+
+
+</apex:component>

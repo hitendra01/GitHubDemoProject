@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Activity_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Activity Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Agent_Gross_Commission__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( RecordType.DeveloperName = &quot;Internal_Broker&quot; &amp;&amp; NOT(ISBLANK(Sale__c)),
+(Formula_Gross_Commission__c - Sale__r.Total_Holdbacks__c) * Agent_Percentage__c,
+Formula_Gross_Commission__c * Agent_Percentage__c)</formula>
+        <label>Agent Gross Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Agent_Percentage__c</fullName>
+        <defaultValue>1.00</defaultValue>
+        <externalId>false</externalId>
+        <label>Agent Percentage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Agent_Probability_Commission__c</fullName>
+        <externalId>false</externalId>
+        <formula>Probability_Commission__c * Agent_Percentage__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Agent Probability Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Broker_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>External Agent</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Commissions</relationshipLabel>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Broker__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Internal Agent</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Escrow__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Do not adjust. The system will update automatically.</inlineHelpText>
+        <label>Project</label>
+        <referenceTo>Escrow__c</referenceTo>
+        <relationshipLabel>Commissions</relationshipLabel>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Formula_Gross_Commission__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(  Proposal__c  &lt;&gt; &quot;&quot;,  Proposal__r.Commission__c , 
+IF( Listing__c &lt;&gt; &quot;&quot;,  Listing__r.Commission_Input__c , 
+IF( Escrow__c &lt;&gt; &quot;&quot;,  Escrow__r.Escrow__c , 
+IF( Sale__c &lt;&gt; &quot;&quot;,  Sale__r.Commission__c , NULL 
+))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Deal Gross Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Gross_Commission__c</fullName>
+        <externalId>false</externalId>
+        <label>Custom</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Listing__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Do not adjust. The system will update automatically.</inlineHelpText>
+        <label>Listing</label>
+        <referenceTo>Listing__c</referenceTo>
+        <relationshipLabel>Commissions</relationshipLabel>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Probability_Commission__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Proposal__c &lt;&gt; &quot;&quot;, Proposal__r.Commission__c * Proposal__r.List_Probability__c  , 
+IF( Listing__c &lt;&gt; &quot;&quot;, Listing__r.Commission_Input__c * Listing__r.Probability__c  , 
+IF( Escrow__c &lt;&gt; &quot;&quot;, Escrow__r.Escrow__c *  Escrow__r.Probability__c , 
+IF( Sale__c &lt;&gt; &quot;&quot;, Sale__r.Commission__c , NULL 
+))))</formula>
+        <label>Deal Probability Commission</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Proposal__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Do not adjust. The system will update automatically.</inlineHelpText>
+        <label>Proposal</label>
+        <referenceTo>Proposal__c</referenceTo>
+        <relationshipLabel>Commissions</relationshipLabel>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sale__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Do not adjust. The system will update automatically.</inlineHelpText>
+        <label>Comp</label>
+        <referenceTo>Sale__c</referenceTo>
+        <relationshipLabel>Commissions</relationshipLabel>
+        <relationshipName>Commissions</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stage__c</fullName>
+        <externalId>false</externalId>
+        <label>Stage</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Proposal</fullName>
+                <color>#FF6600</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Assignment</fullName>
+                <color>#FFCC33</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project</fullName>
+                <color>#33CC00</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <color>#00CCCC</color>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Active Pipeline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed Pipeline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Proposal__r.RecordType.Name = &quot;Seller Representation&quot;, &quot;Sale&quot;, 
+IF( Proposal__r.RecordType.Name = &quot;Buyer Representation&quot;, &quot;Sale&quot;, 
+IF( Listing__r.RecordType.Name  = &quot;Seller Representation&quot;, &quot;Sale&quot;, 
+IF( Listing__r.RecordType.Name  = &quot;Buyer Representation&quot;, &quot;Sale&quot;, 
+IF( Escrow__r.RecordType.Name   = &quot;Pending Sale&quot;, &quot;Sale&quot;, 
+IF( Sale__r.RecordType.Name    = &quot;Sale&quot;, &quot;Sale&quot;, &quot;Lease&quot;))))))</formula>
+        <label>Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Commission</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>C-{00000000}</displayFormat>
+        <label>Commission Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Commissions</pluralLabel>
+    <recordTypes>
+        <fullName>External_Broker</fullName>
+        <active>true</active>
+        <description>Is this commission for an external broker?</description>
+        <label>External Broker</label>
+        <picklistValues>
+            <picklist>Stage__c</picklist>
+            <values>
+                <fullName>Assignment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Proposal</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active Pipeline</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed Pipeline</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Internal_Broker</fullName>
+        <active>true</active>
+        <description>Is this commission for an internal broker?</description>
+        <label>Internal Broker</label>
+        <picklistValues>
+            <picklist>Stage__c</picklist>
+            <values>
+                <fullName>Assignment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Proposal</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active Pipeline</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed Pipeline</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Commission_Lock_booked_commission</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISNEW() &amp;&amp; Sale__r.Booked__c</errorConditionFormula>
+        <errorMessage>You cannot add additional brokers to a booked deal.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Edit_Commissions</fullName>
+        <availability>online</availability>
+        <description>Edit Commissions link for the Proposal, Listing, Project or Comp pages</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Edit Commissions</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/EditCommissions?id={!Proposal__c.Id}{!Listing__c.Id}{!Escrow__c.Id}{!Sale__c.Id}</url>
+    </webLinks>
+</CustomObject>

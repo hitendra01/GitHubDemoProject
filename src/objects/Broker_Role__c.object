@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Archived system function</description>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <fields>
+        <fullName>Broker__c</fullName>
+        <externalId>false</externalId>
+        <label>Broker</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>Broker</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>true</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Broker_s_Role__c</fullName>
+        <externalId>false</externalId>
+        <label>Broker&apos;s Role</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Listing- Listing Broker</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sale- Listing Broker</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sale- Selling Broker</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sale- Mortgage Broker</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project Leasing- Landlord Representative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lease- Landlord Representative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lease- Tenant Representative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Brokerage_Firm__c</fullName>
+        <externalId>false</externalId>
+        <formula>Broker__r.Account.Name</formula>
+        <label>Brokerage Firm</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Escrow__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Escrow</label>
+        <referenceTo>Escrow__c</referenceTo>
+        <relationshipName>Brokers_Roles</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Fee_to_Broker__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>What is the commission amount the broker will receive?</inlineHelpText>
+        <label>Fee to Broker</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Lease__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Lease</label>
+        <referenceTo>Lease__c</referenceTo>
+        <relationshipName>Brokers_Roles</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Listing__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Listing</label>
+        <referenceTo>Listing__c</referenceTo>
+        <relationshipName>Brokers</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Project_Leasing__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Project Leasing</label>
+        <referenceTo>Project_Leasing__c</referenceTo>
+        <relationshipName>Brokers_Roles</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sales__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Sale</label>
+        <referenceTo>Sale__c</referenceTo>
+        <relationshipName>Brokers</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <label>system.brokers role</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>Broker__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>{000000}</displayFormat>
+        <label>Broker Role ID</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>system.brokers roles</pluralLabel>
+    <recordTypes>
+        <fullName>External_Broker</fullName>
+        <active>false</active>
+        <label>External Broker</label>
+        <picklistValues>
+            <picklist>Broker_s_Role__c</picklist>
+            <values>
+                <fullName>Lease- Landlord Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lease- Tenant Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Listing- Listing Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Leasing- Landlord Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Listing Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Mortgage Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Selling Broker</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Internal_Broker</fullName>
+        <active>true</active>
+        <label>Internal Broker</label>
+        <picklistValues>
+            <picklist>Broker_s_Role__c</picklist>
+            <values>
+                <fullName>Lease- Landlord Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lease- Tenant Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Listing- Listing Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Leasing- Landlord Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Listing Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Mortgage Broker</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sale- Selling Broker</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Broker__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Broker_s_Role__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Brokerage_Firm__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Fee_to_Broker__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Broker__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Broker_s_Role__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Brokerage_Firm__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Fee_to_Broker__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

@@ -1,0 +1,112 @@
+<apex:page controller="Rcm1ConfigController" action="{!getConfig}">
+    <style>
+        /*-----------Spalsh Panel -------*/
+        .button  { background: #ccc; height:100%; width: 100%; opacity:0.9; }
+        
+        .circle {                
+            width:400px;
+            height:100px;
+            position:relative;              
+            margin: 0 auto;
+            opacity:1; 
+            padding: 15% 0 0 0;
+            font-family:Verdana, Arial, Helvetica, sans-serif;
+            font-size:13px;
+            color:#000000;
+            line-height:20px;
+            font-weight: bold; 
+        }          
+    </style>
+    <apex:form id="theForm">
+    
+        <!-- Div for Splash Status Bar -->
+        <div class="button" id="splashDiv" style="display:none;position:fixed;left:0px;top:0px;border: 0px;z-index:9999;">
+            <div class="circle"><apex:image style="height:70%;" value="{!$Resource.LoadingImg}"></apex:image>&nbsp;&nbsp;&nbsp;Please Wait. Loading...</div>
+        </div>
+        <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); "/>
+        
+        <apex:sectionHeader title="Configurations" subtitle="RCM1 Configurations"/>
+        <apex:pageBlock >
+            <!-- Error Message -->
+            <apex:outputPanel id="msg">
+                <apex:pageMessages /> 
+            </apex:outputPanel>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!edit}" value=" Edit " rendered="{!!editMode}"/>
+                <apex:commandButton action="{!save}" value=" Save " rendered="{!editMode}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!editMode}"/>
+                <apex:commandButton action="{!runImporter}" value="Import Now" rendered="{!!editMode}"/>
+                <apex:commandButton action="{!startScheduler}" value="Start Scheduler" rendered="{!If(null == config.scheduler_id__c, true, false)}" rerender="theForm" status="splashStatus"/>
+                <apex:commandButton action="{!stopScheduler}" value="Stop Scheduler" rendered="{!If(null != config.scheduler_id__c, true, false)}" rerender="theForm" status="splashStatus"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem helpText="Configuration Information">
+                    <label>Information:</label>
+                    <apex:outputText escape="false" value="Use this page to edit the Api key provided by RCM1.<br/>Click the 'Import Now' button to trigger a manual import of all the RCM1 data.<br/> Click the 'Start/Stop Scheduler' button to start/stop an automatic daily import." />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <hr/> 
+            <!-- These two fields are editable -->
+            <apex:pageBlockSection columns="1" id="optionalArea" rendered="{!editMode}">
+                <apex:pageBlockSectionItem helpText="{!$ObjectType.RCM1_Settings__c.Fields.Api_Key__c.inlineHelpText}">
+                    <label>API Key</label>
+                    <apex:inputField value="{!config.Api_Key__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem helpText="{!$ObjectType.RCM1_Settings__c.Fields.isTest__c.inlineHelpText}">
+                    <label>Test Environment</label>
+                    <apex:inputField value="{!config.isTest__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <label>Activities Import Date</label>
+                    <apex:inputField value="{!config.Activities_Import_Date__c}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!-- The following fields are not editable -->
+            <apex:pageBlockSection columns="1" rendered="{!!editMode}">
+                <apex:pageBlockSectionItem helpText="{!$ObjectType.RCM1_Settings__c.Fields.Api_Key__c.inlineHelpText}">
+                    <label>API Key</label>
+                    <apex:outputField value="{!config.Api_Key__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem helpText="{!$ObjectType.RCM1_Settings__c.Fields.isTest__c.inlineHelpText}">
+                    <label>Test Environment</label>
+                    <apex:outputField value="{!config.isTest__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <label>Activities Import Date</label>
+                    <apex:outputField value="{!config.Activities_Import_Date__c}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!-- The following fields show up as non editable always -->
+<!--            <apex:pageBlockSection columns="1"> -->
+<!--                <hr/> -->
+<!--                <apex:pageBlockSectionItem helpText="{!$ObjectType.Google_Spreadsheet_Org_Wide_Config__c.Fields.spreadsheet_link__c.inlineHelpText}"> -->
+<!--                    <label>Spreadsheet Link</label> -->
+<!--                    <apex:outputField value="{!config.spreadsheet_link__c}" /> -->
+<!--                </apex:pageBlockSectionItem> -->
+<!--            </apex:pageBlockSection> -->
+        </apex:pageBlock>
+    </apex:form>
+    
+    <script>
+        //Function is used to get splash status bar when server side call is going on
+        function startSplash() {
+            var divObj = document.getElementById('splashDiv');
+            var browserName = navigator.appName;
+            if(browserName == 'Netscape'){
+                   divObj.style.display='table-cell';
+            } else {
+                    divObj.style.display='table-cell';
+            }
+               
+        }
+        
+        //Function will make the splash status to be stopped.
+        function endSplash() {            
+            document.getElementById('splashDiv').style.display='none';
+        }
+        
+    </script>
+</apex:page>

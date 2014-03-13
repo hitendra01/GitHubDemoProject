@@ -1,0 +1,9 @@
+<apex:page standardController="Listing__c" extensions="PropertyMapcontroller" sidebar="false" showHeader="false">
+<apex:outputPanel rendered="{!showMap}">
+<c:sfGMap width="425" height="265" addressmodel="{!addressmodel}" zoom="10" uselatlng="false">
+</c:sfGMap>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!NOT(showMap)}">
+Not Found
+</apex:outputPanel>
+</apex:page>
